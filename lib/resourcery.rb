@@ -42,15 +42,8 @@ module Resourcery
 
     def collection
       instance_variable_get("@#{plural_resource_name}") || begin
-        scoped_model = allowance.scoped_model(params[:action].to_sym, self.class.resource_class)
-
-        # SMELL: not too happy about this, but we need to make sure straight
-        #        classes are turned into scopes, too.
-        unless scoped_model.is_a?(ActiveRecord::Relation)
-          scoped_model = scoped_model.where(true)
-        end
-
-        instance_variable_set("@#{plural_resource_name}", scoped_model)
+        instance_variable_set("@#{plural_resource_name}",
+          allowance.scoped_model(params[:action].to_sym, self.class.resource_class).scoped)
       end
     end
 
