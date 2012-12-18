@@ -15,3 +15,5 @@ gem "jquery-rails"
 
 # To use debugger
 # gem 'debugger'
+
+gem 'allowance', github: 'hmans/allowance', branch: 'master'

@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/hmans/allowance.git
+  revision: 8460d00cd21c8cb444ca03aa03bdcb6764ce29d6
+  branch: master
+  specs:
+    allowance (0.2.0)
+
 PATH
   remote: .
   specs:
@@ -110,6 +117,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  allowance!
   factory_girl_rails
   jquery-rails
   resourcery!
