@@ -59,7 +59,7 @@ module Dummy
     config.generators do |g|
       g.orm             :active_record
       g.template_engine :erb
-      g.test_framework  :rspec, :fixture => true
+      g.test_framework  false #:rspec, :fixture => true
       g.fixture_replacement :factory_girl
       g.stylesheets = false
       g.javascripts = false
