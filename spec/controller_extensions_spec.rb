@@ -57,6 +57,37 @@ describe 'controller extensions', type: :controller do
       end
     end
 
+    describe 'PUT update' do
+      before do
+        User.should_receive(:find).with("123").and_return(resource)
+        resource.should_receive(:update_attributes).with(user_attributes)
+
+        put :update, id: 123, user: user_attributes
+      end
+
+      context "when the resource was updated successfully" do
+        it "should set resource ivar" do
+          expect(assigns(:user)).to eq(resource)
+        end
+
+        it "should redirect to the resource path" do
+          expect(response).to redirect_to user_path(resource)
+        end
+      end
+
+      context "when the resource could not be updated" do
+        let(:resource) { resource_with_errors }
+
+        it "should set resource ivar" do
+          expect(assigns(:user)).to eq(resource)
+        end
+
+        it "should render the 'edit' view" do
+          expect(response).to render_template('edit')
+        end
+      end
+    end
+
     describe 'GET new' do
       before do
         User.should_receive(:new).with(user_attributes).and_return(resource)
