@@ -35,10 +35,14 @@ module Resourcery
 
     protected
 
+      def resource_class
+        self.class.resource_class
+      end
+
       # The starting point. Override this in a controller if necessary.
       #
       def resource_base
-        self.class.resource_class.scoped
+        resource_class.scoped
       end
 
       def collection
