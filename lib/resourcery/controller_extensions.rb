@@ -33,19 +33,21 @@ module Resourcery
         respond_with resource
       end
 
-    private
+    protected
+
+      # The starting point. Override this in a controller if necessary.
+      #
+      def resource_base
+        self.class.resource_class.scoped
+      end
 
       def collection
-        instance_variable_get("@#{plural_resource_name}") || begin
-          instance_variable_set("@#{plural_resource_name}",
-            self.class.resource_class.scoped)
-        end
+        self.collection_ivar ||= resource_base
       end
 
       def resource
         if params[:id]
-          instance_variable_get("@#{singular_resource_name}") ||
-            instance_variable_set("@#{singular_resource_name}", collection.send(self.class.resource_options[:finder], params[:id]))
+          self.resource_ivar ||= collection.send(self.class.resource_options[:finder], params[:id])
         end
       end
 
@@ -55,6 +57,22 @@ module Resourcery
 
       def plural_resource_name
         singular_resource_name.pluralize
+      end
+
+      def resource_ivar
+        instance_variable_get("@#{singular_resource_name}")
+      end
+
+      def resource_ivar=(v)
+        instance_variable_set("@#{singular_resource_name}", v)
+      end
+
+      def collection_ivar
+        instance_variable_get("@#{plural_resource_name}")
+      end
+
+      def collection_ivar=(v)
+        instance_variable_set("@#{plural_resource_name}", v)
       end
     end
 
