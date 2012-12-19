@@ -134,5 +134,21 @@ describe 'controller extensions', type: :controller do
       end
     end
 
+    describe 'DELETE destroy' do
+      before do
+        User.should_receive(:find).with("123").and_return(resource)
+        resource.should_receive(:destroy)
+
+        delete :destroy, id: 123
+      end
+
+      it "should set resource ivar" do
+        expect(assigns(:user)).to eq(resource)
+      end
+
+      it "should redirect to the collection url" do
+        expect(response).to redirect_to users_path
+      end
+    end
   end
 end

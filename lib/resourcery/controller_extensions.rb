@@ -31,7 +31,7 @@ module Resourcery
 
       def destroy
         resource.destroy
-        respond_with resource
+        redirect_to resource_class
       end
 
     protected
