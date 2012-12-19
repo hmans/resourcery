@@ -35,14 +35,10 @@ module Resourcery
 
     private
 
-      def authorize!(action, object)
-        raise AccessDenied unless allowance.can? action.to_sym, object
-      end
-
       def collection
         instance_variable_get("@#{plural_resource_name}") || begin
           instance_variable_set("@#{plural_resource_name}",
-            allowance.scoped_model(params[:action].to_sym, self.class.resource_class).scoped)
+            self.class.resource_class.scoped)
         end
       end
 
@@ -51,9 +47,6 @@ module Resourcery
           instance_variable_get("@#{singular_resource_name}") ||
             instance_variable_set("@#{singular_resource_name}", collection.send(self.class.resource_options[:finder], params[:id]))
         end
-      end
-
-      def allowance
       end
 
       def singular_resource_name
