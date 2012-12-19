@@ -24,9 +24,9 @@ module Resourcery
       end
 
       def create
-        @user = collection.new(params[singular_resource_name])
-        @user.save
-        respond_with @user
+        self.resource_ivar = collection.new(params[singular_resource_name])
+        resource.save
+        respond_with resource
       end
 
       def destroy
@@ -51,8 +51,10 @@ module Resourcery
       end
 
       def resource
-        if params[:id]
-          self.resource_ivar ||= collection.send(self.class.resource_options[:finder], params[:id])
+        self.resource_ivar ||= begin
+          if params[:id]
+            collection.send(self.class.resource_options[:finder], params[:id])
+          end
         end
       end
 
