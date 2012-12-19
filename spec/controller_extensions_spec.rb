@@ -4,6 +4,7 @@ describe 'controller extensions', type: :controller do
   let(:collection) { User }
   let(:resource)   { mock_model User }
   let(:resource_with_errors) { mock_model User, errors: { name: "is not allowed" } }
+  let(:user_attributes)      { { "name" => "Hendrik", "admin" => true } }
 
   describe 'standard behaviour of REST actions' do
     controller do
@@ -56,9 +57,22 @@ describe 'controller extensions', type: :controller do
       end
     end
 
-    describe 'POST create' do
-      let(:user_attributes) { { "name" => "Hendrik", "admin" => true } }
+    describe 'GET new' do
+      before do
+        User.should_receive(:new).with(user_attributes).and_return(resource)
+        get :new, user: user_attributes
+      end
 
+      it "should set resource ivar" do
+        expect(assigns(:user)).to eq(resource)
+      end
+
+      it "should render the 'new' view" do
+        expect(response).to render_template('new')
+      end
+    end
+
+    describe 'POST create' do
       before do
         User.should_receive(:new).with(user_attributes).and_return(resource)
         resource.should_receive(:save)

@@ -19,7 +19,8 @@ module Resourcery
       end
 
       def new
-        respond_with collection.new
+        self.resource_ivar = collection.new(params[singular_resource_name])
+        respond_with resource_ivar
       end
 
       def create
