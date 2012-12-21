@@ -14,7 +14,8 @@ describe 'controller extensions', type: :controller do
 
     describe 'GET index' do
       before do
-        User.should_receive(:scoped).and_return(collection)
+        collection.should_receive(:scoped).and_return(collection)
+        collection.should_receive(:all).and_return(collection)
         get :index
       end
 
