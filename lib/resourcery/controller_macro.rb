@@ -7,6 +7,7 @@ module Resourcery
       }.merge(opts)
 
       extend  ControllerExtensions::ClassMethods
+      include ControllerExtensions::Filters
       include ControllerExtensions::InstanceMethods
 
       @resource_class = @resource_options[:klass]

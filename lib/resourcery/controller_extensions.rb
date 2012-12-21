@@ -1,5 +1,21 @@
 module Resourcery
   module ControllerExtensions
+    module Filters
+      def self.included(base)
+        base.before_filter(only: :index) do
+          self.collection_ivar = collection
+        end
+
+        base.before_filter(only: [:show, :edit, :update, :destroy]) do
+          self.resource_ivar = resource
+        end
+
+        base.before_filter(only: [:new, :create]) do
+          self.resource_ivar = new_resorce
+        end
+      end
+    end
+
     module InstanceMethods
       def index
         respond_with collection
@@ -47,15 +63,15 @@ module Resourcery
       end
 
       def collection
-        self.collection_ivar ||= resource_base
+        collection_ivar || resource_base.all
       end
 
       def resource
-        self.resource_ivar ||= begin
-          if params[:id]
-            collection.send(self.class.resource_options[:finder], params[:id])
-          end
-        end
+        resource_ivar || resource_base.send(self.class.resource_options[:finder], params[:id])
+      end
+
+      def new_resource
+        resource_ivar || resource_base.new(params[singular_resource_name])
       end
 
       def singular_resource_name
