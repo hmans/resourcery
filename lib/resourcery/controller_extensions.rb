@@ -11,7 +11,7 @@ module Resourcery
         end
 
         base.before_filter(only: [:new, :create]) do
-          self.resource_ivar = new_resorce
+          self.resource_ivar = new_resource
         end
       end
     end
@@ -35,12 +35,10 @@ module Resourcery
       end
 
       def new
-        self.resource_ivar = collection.new(params[singular_resource_name])
         respond_with resource_ivar
       end
 
       def create
-        self.resource_ivar = collection.new(params[singular_resource_name])
         resource.save
         respond_with resource
       end
