@@ -15,13 +15,35 @@ describe 'serve_resource', type: :controller do
   end
 
   context "when explicitly specifying a resource class" do
-    describe ApplicationController do
+    controller do
+      respond_to :html
+      serve_resource User
+    end
+
+    it 'should set the resource class according to the argument' do
+      subject.send(:resource_class).should == User
+    end
+  end
+
+  context "when specifying the resource class as a symbol" do
+    context "when symbol is singular" do
       controller do
         respond_to :html
-        serve_resource User
+        serve_resource :user
       end
 
-      it 'should set the resource class according to the argument' do
+      it 'correctly sets the resource class' do
+        subject.send(:resource_class).should == User
+      end
+    end
+
+    context "when symbol is plural" do
+      controller do
+        respond_to :html
+        serve_resource :users
+      end
+
+      it 'correctly sets the resource class' do
         subject.send(:resource_class).should == User
       end
     end
