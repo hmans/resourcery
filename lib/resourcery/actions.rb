@@ -4,31 +4,35 @@ module Resourcery
       respond_with collection
     end
 
-    def show
-      respond_with resource
+    def show(&blk)
+      respond_with resource, &blk
     end
 
-    def edit
-      respond_with resource
+    def edit(&blk)
+      respond_with resource, &blk
     end
 
-    def update
+    def update(&blk)
       resource.update_attributes(params[singular_resource_name])
-      respond_with resource
+      respond_with resource, &blk
     end
 
-    def new
-      respond_with resource_ivar
+    def new(&blk)
+      respond_with resource, &blk
     end
 
-    def create
+    def create(&blk)
       resource.save
-      respond_with resource
+      respond_with resource, &blk
     end
 
-    def destroy
+    def destroy(&blk)
       resource.destroy
-      redirect_to resource_class
+
+      respond_with(resource) do |format|
+        yield(format) if block_given?
+        format.html { redirect_to(resource_class) }
+      end
     end
   end
 end
