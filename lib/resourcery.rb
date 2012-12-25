@@ -1,4 +1,6 @@
-require 'resourcery/controller_extensions'
+require 'resourcery/filters'
+require 'resourcery/helpers'
+require 'resourcery/actions'
 require 'resourcery/controller_macro'
 
 module Resourcery

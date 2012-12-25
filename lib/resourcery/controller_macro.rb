@@ -15,9 +15,9 @@ module Resourcery
       @resource_options = opts
 
       # load controller extensions
-      extend  ControllerExtensions::ClassMethods
-      include ControllerExtensions::Filters
-      include ControllerExtensions::InstanceMethods
+      include Filters
+      include Actions
+      include Helpers
 
       # determine resource class
       @resource_class = case klass
@@ -30,6 +30,14 @@ module Resourcery
 
       # Make sure we'll serve at least HTML
       respond_to :html if mimes_for_respond_to.empty?
+    end
+
+    def resource_class
+      @resource_class
+    end
+
+    def resource_options
+      @resource_options
     end
   end
 end
