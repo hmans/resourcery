@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = Resourcery::VERSION
   s.authors     = ["Hendrik Mans"]
   s.email       = ["hendrik@mans.de"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Resourcery."
-  s.description = "TODO: Description of Resourcery."
+  s.homepage    = "http://github.com/hmans/resourcery"
+  s.summary     = "Simple serving of RESTful resources."
+  s.description = "Simple serving of RESTful resources."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["spec/**/*"]
