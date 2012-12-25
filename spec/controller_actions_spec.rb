@@ -14,7 +14,6 @@ describe 'controller actions', type: :controller do
     describe 'GET index' do
       before do
         collection.should_receive(:scoped).and_return(collection)
-        collection.should_receive(:all).and_return(collection)
         get :index
       end
 

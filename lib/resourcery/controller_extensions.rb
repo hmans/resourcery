@@ -61,7 +61,7 @@ module Resourcery
       end
 
       def collection
-        collection_ivar || resource_base.all
+        collection_ivar || resource_base
       end
 
       def resource
