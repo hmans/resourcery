@@ -1,10 +1,20 @@
 module Resourcery
   module ControllerMacro
     def serve_resource(klass = nil, opts = {})
-      @resource_options = {
+      opts = {
         finder: :find
       }.merge(opts)
 
+      # set up loading of parent resource
+      if opts[:parent]
+        opts[:parent_id_param] ||= "#{opts[:parent]}_id"
+        opts[:parent_finder]   ||= :find
+      end
+
+      # store options
+      @resource_options = opts
+
+      # load controller extensions
       extend  ControllerExtensions::ClassMethods
       include ControllerExtensions::Filters
       include ControllerExtensions::InstanceMethods

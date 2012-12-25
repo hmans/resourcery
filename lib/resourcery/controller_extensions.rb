@@ -2,6 +2,15 @@ module Resourcery
   module ControllerExtensions
     module Filters
       def self.included(base)
+        # Load parent resource before all actions.
+        #
+        base.before_filter do
+          opts = self.class.resource_options
+          if opts[:parent] && params[opts[:parent_id_param]]
+            instance_variable_set("@#{opts[:parent]}", opts[:parent].to_s.classify.constantize.send(opts[:parent_finder], params[opts[:parent_id_param]]))
+          end
+        end
+
         base.before_filter(only: :index) do
           self.collection_ivar = collection
         end
@@ -54,10 +63,14 @@ module Resourcery
         self.class.resource_class
       end
 
+      def resource_options
+        self.class.resource_options
+      end
+
       # The starting point. Override this in a controller if necessary.
       #
       def resource_base
-        resource_class.scoped
+        parent_resource_scope || resource_class.scoped
       end
 
       def collection
@@ -65,7 +78,7 @@ module Resourcery
       end
 
       def resource
-        resource_ivar || resource_base.send(self.class.resource_options[:finder], params[:id])
+        resource_ivar || resource_base.send(resource_options[:finder], params[:id])
       end
 
       def new_resource
@@ -94,6 +107,10 @@ module Resourcery
 
       def collection_ivar=(v)
         instance_variable_set("@#{plural_resource_name}", v)
+      end
+
+      def parent_resource_scope
+        instance_variable_get("@#{resource_options[:parent]}").try(plural_resource_name)
       end
     end
 
