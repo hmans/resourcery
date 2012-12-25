@@ -8,7 +8,6 @@ describe 'controller actions', type: :controller do
 
   describe 'standard behaviour of REST actions' do
     controller do
-      respond_to :html
       serve_resource User
     end
 

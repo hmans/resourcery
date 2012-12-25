@@ -17,6 +17,9 @@ module Resourcery
       end
 
       helper_method :resource, :collection
+
+      # Make sure we'll serve at least HTML
+      respond_to :html if mimes_for_respond_to.empty?
     end
   end
 end

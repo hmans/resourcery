@@ -9,7 +9,6 @@ describe 'serve_resource', type: :controller do
 
   context "when a resource class is not explicitly specified" do
     class UsersController < ApplicationController
-      respond_to :html
       serve_resource
     end
 
@@ -20,7 +19,6 @@ describe 'serve_resource', type: :controller do
 
   context "when explicitly specifying a resource class" do
     controller do
-      respond_to :html
       serve_resource User
     end
 
@@ -30,7 +28,6 @@ describe 'serve_resource', type: :controller do
   context "when specifying the resource class as a symbol" do
     context "when symbol is singular" do
       controller do
-        respond_to :html
         serve_resource :user
       end
 
@@ -39,7 +36,6 @@ describe 'serve_resource', type: :controller do
 
     context "when symbol is plural" do
       controller do
-        respond_to :html
         serve_resource :users
       end
 
