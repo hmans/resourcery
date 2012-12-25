@@ -5,9 +5,8 @@ module Resourcery
         # Load parent resource before all actions.
         #
         base.before_filter do
-          opts = self.class.resource_options
-          if opts[:parent] && params[opts[:parent_id_param]]
-            instance_variable_set("@#{opts[:parent]}", opts[:parent].to_s.classify.constantize.send(opts[:parent_finder], params[opts[:parent_id_param]]))
+          if resource_options[:parent] && params[resource_options[:parent_id_param]]
+            self.parent_resource_ivar = parent_resource
           end
         end
 
@@ -85,8 +84,20 @@ module Resourcery
         resource_ivar || resource_base.new(params[singular_resource_name])
       end
 
+      def parent_resource
+        parent_resource_ivar || parent_resource_class.send(resource_options[:parent_finder], params[resource_options[:parent_id_param]])
+      end
+
+      def parent_resource_name
+        resource_options[:parent].to_s
+      end
+
+      def parent_resource_class
+        parent_resource_name.classify.constantize
+      end
+
       def singular_resource_name
-        self.class.resource_class.name.underscore
+        resource_class.name.underscore
       end
 
       def plural_resource_name
@@ -107,6 +118,14 @@ module Resourcery
 
       def collection_ivar=(v)
         instance_variable_set("@#{plural_resource_name}", v)
+      end
+
+      def parent_resource_ivar
+        instance_variable_get("@#{parent_resource_name}")
+      end
+
+      def parent_resource_ivar=(v)
+        instance_variable_set("@#{parent_resource_name}", v)
       end
 
       def parent_resource_scope
