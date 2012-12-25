@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe 'serve_resource', type: :controller do
+  shared_examples "a controller serving the User class" do
+    it "serves the User class" do
+      subject.send(:resource_class).should == User
+    end
+  end
+
   context "when a resource class is not explicitly specified" do
     class UsersController < ApplicationController
       respond_to :html
@@ -8,9 +14,7 @@ describe 'serve_resource', type: :controller do
     end
 
     describe UsersController, type: :controller do
-      it "should choose the resource class name based on the controller class name" do
-        subject.send(:resource_class).should == User
-      end
+      it_behaves_like "a controller serving the User class"
     end
   end
 
@@ -20,9 +24,7 @@ describe 'serve_resource', type: :controller do
       serve_resource User
     end
 
-    it 'should set the resource class according to the argument' do
-      subject.send(:resource_class).should == User
-    end
+    it_behaves_like "a controller serving the User class"
   end
 
   context "when specifying the resource class as a symbol" do
@@ -32,9 +34,7 @@ describe 'serve_resource', type: :controller do
         serve_resource :user
       end
 
-      it 'correctly sets the resource class' do
-        subject.send(:resource_class).should == User
-      end
+      it_behaves_like "a controller serving the User class"
     end
 
     context "when symbol is plural" do
@@ -43,9 +43,7 @@ describe 'serve_resource', type: :controller do
         serve_resource :users
       end
 
-      it 'correctly sets the resource class' do
-        subject.send(:resource_class).should == User
-      end
+      it_behaves_like "a controller serving the User class"
     end
   end
 end
