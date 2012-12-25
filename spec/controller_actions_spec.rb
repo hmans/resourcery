@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'controller extensions', type: :controller do
+describe 'controller actions', type: :controller do
   let(:collection) { User }
   let(:resource)   { mock_model User }
   let(:resource_with_errors) { mock_model User, errors: { name: "is not allowed" } }
