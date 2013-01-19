@@ -8,7 +8,7 @@ describe 'controller actions', type: :controller do
 
   describe 'standard behaviour of REST actions' do
     controller do
-      include Resourcery
+      include Resourcery::Base
 
       def resource_base
         User
