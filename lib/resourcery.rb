@@ -65,7 +65,7 @@ module Resourcery
 
     respond_with(resource) do |format|
       yield(format) if block_given?
-      format.html { redirect_to(resource_class) }
+      format.html { redirect_to(resource.class) }
     end
   end
 
@@ -84,7 +84,13 @@ protected
   end
 
   def collection
-    @collection ||= resource_base.allowed(current_user, action_name.to_sym)
+    @collection ||= begin
+      if Resourcery.allowance_enabled?
+        resource_base.allowed(current_user, action_name.to_sym)
+      else
+        resource_base.scoped
+      end
+    end
   end
 
   def resource
@@ -96,6 +102,8 @@ protected
   end
 
   def authorize!(object)
+    return unless Resourcery.allowance_enabled?
+
     # check resource scopes
     if object.respond_to?(:model_name)
       # object is a collection
@@ -108,6 +116,12 @@ protected
       else
         raise Unauthorized unless current_user.allowed?(action_name.to_sym, object)
       end
+    end
+  end
+
+  class << self
+    def allowance_enabled?
+      defined?(Allowance)
     end
   end
 end

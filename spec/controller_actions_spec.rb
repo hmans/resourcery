@@ -8,7 +8,11 @@ describe 'controller actions', type: :controller do
 
   describe 'standard behaviour of REST actions' do
     controller do
-      serve_resource User
+      include Resourcery
+
+      def resource_base
+        User
+      end
     end
 
     describe 'GET index' do
@@ -28,7 +32,7 @@ describe 'controller actions', type: :controller do
 
     describe 'GET show' do
       before do
-        User.should_receive(:find).with("123").and_return(resource)
+        User.should_receive(:where).with(id: "123").and_return(double(:first! => resource))
         get :show, id: 123
       end
 
@@ -43,7 +47,7 @@ describe 'controller actions', type: :controller do
 
     describe 'GET edit' do
       before do
-        User.should_receive(:find).with("123").and_return(resource)
+        User.should_receive(:where).with(id: "123").and_return(double(:first! => resource))
         get :edit, id: 123
       end
 
@@ -58,7 +62,7 @@ describe 'controller actions', type: :controller do
 
     describe 'PUT update' do
       before do
-        User.should_receive(:find).with("123").and_return(resource)
+        User.should_receive(:where).with(id: "123").and_return(double(:first! => resource))
         resource.should_receive(:update_attributes).with(user_attributes)
 
         put :update, id: 123, user: user_attributes
@@ -135,7 +139,7 @@ describe 'controller actions', type: :controller do
 
     describe 'DELETE destroy' do
       before do
-        User.should_receive(:find).with("123").and_return(resource)
+        User.should_receive(:where).with(id: "123").and_return(double(:first! => resource))
         resource.should_receive(:destroy)
 
         delete :destroy, id: 123
