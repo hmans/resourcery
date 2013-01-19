@@ -42,7 +42,7 @@ module Resourcery
     end
 
     def update(&blk)
-      resource.update_attributes(params[resource_name])
+      resource.update_attributes(resource_params)
       respond_with resource, &blk
     end
 
@@ -78,6 +78,10 @@ module Resourcery
       :id
     end
 
+    def resource_params
+      params[resource_name]
+    end
+
     def collection
       @collection ||= resource_base.scoped
     end
@@ -87,7 +91,7 @@ module Resourcery
     end
 
     def new_resource
-      @resource ||= collection.new(params[resource_name])
+      @resource ||= collection.new(resource_params)
     end
 
     def authorize!(object)
