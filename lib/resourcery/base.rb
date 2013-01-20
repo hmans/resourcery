@@ -30,35 +30,35 @@ module Resourcery
     #
 
     def index(&blk)
-      respond_with resource_parents + [collection], &blk
+      respond_with *(resource_parents + [collection]), &blk
     end
 
     def show(&blk)
-      respond_with resource_parents + [resource], &blk
+      respond_with *(resource_parents + [resource]), &blk
     end
 
     def edit(&blk)
-      respond_with resource_parents + [resource], &blk
+      respond_with *(resource_parents + [resource]), &blk
     end
 
     def update(&blk)
       resource.update_attributes(resource_params)
-      respond_with resource_parents + [resource], &blk
+      respond_with *(resource_parents + [resource]), &blk
     end
 
     def new(&blk)
-      respond_with resource_parents + [resource], &blk
+      respond_with *(resource_parents + [resource]), &blk
     end
 
     def create(&blk)
       resource.save
-      respond_with resource_parents + [resource], &blk
+      respond_with *(resource_parents + [resource]), &blk
     end
 
     def destroy(&blk)
       resource.destroy
 
-      respond_with(resource_parents + [resource]) do |format|
+      respond_with(*(resource_parents + [resource])) do |format|
         yield(format) if block_given?
         format.html { redirect_to(resource.class) }
       end
