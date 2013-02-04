@@ -13,7 +13,8 @@ module Resourcery
       else
         # object is a resource
         if object.new_record?
-          # TODO: how do we authorize a new record?
+          # TODO: how do we authorize a new record against a scope?
+          raise Unauthorized unless current_user.allowed?(action_name.to_sym, object.class)
         else
           raise Unauthorized unless current_user.allowed?(action_name.to_sym, object)
         end
