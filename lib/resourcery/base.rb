@@ -5,20 +5,18 @@ module Resourcery
         respond_to :html if mimes_for_respond_to.empty?
 
         before_filter only: RESOURCE_ACTIONS do
+          instance_variable_set("@#{resource_name}", resource)
           authorize!(resource)
         end
 
         before_filter only: COLLECTION_ACTIONS do
+          instance_variable_set("@#{resource_name.pluralize}", collection)
           authorize!(collection)
         end
 
         before_filter only: NEW_RESOURCE_ACTIONS do
+          instance_variable_set("@#{resource_name}", new_resource)
           authorize!(new_resource)
-        end
-
-        before_filter do
-          instance_variable_set("@#{resource_name}", @resource)
-          instance_variable_set("@#{resource_name.pluralize}", @collection)
         end
 
         helper_method :resource, :collection
